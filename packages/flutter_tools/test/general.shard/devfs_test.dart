@@ -47,13 +47,13 @@ const FakeVmServiceRequest failingCreateDevFSRequest = FakeVmServiceRequest(
   args: <String, Object>{
     'fsName': 'test',
   },
-  errorCode: RPCErrorCodes.kServiceDisappeared,
+  error: FakeRPCError(code: RPCErrorCodes.kServiceDisappeared),
 );
 
 const FakeVmServiceRequest failingDeleteDevFSRequest = FakeVmServiceRequest(
   method: '_deleteDevFS',
   args: <String, dynamic>{'fsName': 'test'},
-  errorCode: RPCErrorCodes.kServiceDisappeared,
+  error: FakeRPCError(code: RPCErrorCodes.kServiceDisappeared),
 );
 
 void main() {
@@ -702,7 +702,18 @@ class FakeResidentCompiler extends Fake implements ResidentCompiler {
   Future<CompilerOutput> Function(Uri mainUri, List<Uri>? invalidatedFiles)? onRecompile;
 
   @override
-  Future<CompilerOutput> recompile(Uri mainUri, List<Uri>? invalidatedFiles, {String? outputPath, PackageConfig? packageConfig, String? projectRootPath, FileSystem? fs, bool suppressErrors = false, bool checkDartPluginRegistry = false, File? dartPluginRegistrant}) {
+  Future<CompilerOutput> recompile(
+    Uri mainUri,
+    List<Uri>? invalidatedFiles, {
+    String? outputPath,
+    PackageConfig? packageConfig,
+    String? projectRootPath,
+    FileSystem? fs,
+    bool suppressErrors = false,
+    bool checkDartPluginRegistry = false,
+    File? dartPluginRegistrant,
+    Uri? nativeAssetsYaml,
+  }) {
     return onRecompile?.call(mainUri, invalidatedFiles)
       ?? Future<CompilerOutput>.value(const CompilerOutput('', 1, <Uri>[]));
   }
@@ -722,7 +733,14 @@ class FakeBundle extends AssetBundle {
   List<File> get additionalDependencies => <File>[];
 
   @override
-  Future<int> build({String manifestPath = defaultManifestPath, String? assetDirPath, String? packagesPath, bool deferredComponentsEnabled = false, TargetPlatform? targetPlatform}) async {
+  Future<int> build({
+    String manifestPath = defaultManifestPath,
+    String? assetDirPath,
+    String? packagesPath,
+    bool deferredComponentsEnabled = false,
+    TargetPlatform? targetPlatform,
+    String? flavor,
+  }) async {
     return 0;
   }
 

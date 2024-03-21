@@ -22,10 +22,12 @@ import 'package:flutter_tools/src/ios/xcodeproj.dart';
 import 'package:flutter_tools/src/macos/xcdevice.dart';
 import 'package:flutter_tools/src/macos/xcode.dart';
 import 'package:test/fake.dart';
+import 'package:unified_analytics/unified_analytics.dart';
 
 import '../../src/common.dart';
 import '../../src/context.dart';
 import '../../src/fake_process_manager.dart';
+import '../../src/fakes.dart';
 
 void main() {
   late BufferLogger logger;
@@ -515,6 +517,10 @@ void main() {
           fileSystem: fileSystem,
           coreDeviceControl: FakeIOSCoreDeviceControl(),
           xcodeDebug: FakeXcodeDebug(),
+<<<<<<< HEAD
+=======
+          analytics: NoOpAnalytics(),
+>>>>>>> 68bfaea224880b488c617afe30ab12091ea8fa4e
         );
       });
 
@@ -533,12 +539,23 @@ void main() {
       late XCDevice xcdevice;
       late Xcode xcode;
       late MemoryFileSystem fileSystem;
+<<<<<<< HEAD
+=======
+      late FakeAnalytics fakeAnalytics;
+>>>>>>> 68bfaea224880b488c617afe30ab12091ea8fa4e
       late FakeIOSCoreDeviceControl coreDeviceControl;
 
       setUp(() {
         xcode = Xcode.test(processManager: FakeProcessManager.any());
         fileSystem = MemoryFileSystem.test();
         coreDeviceControl = FakeIOSCoreDeviceControl();
+<<<<<<< HEAD
+=======
+        fakeAnalytics = getInitializedFakeAnalyticsInstance(
+          fs: fileSystem,
+          fakeFlutterVersion: FakeFlutterVersion(),
+        );
+>>>>>>> 68bfaea224880b488c617afe30ab12091ea8fa4e
         xcdevice = XCDevice(
           processManager: fakeProcessManager,
           logger: logger,
@@ -550,6 +567,10 @@ void main() {
           fileSystem: fileSystem,
           coreDeviceControl: coreDeviceControl,
           xcodeDebug: FakeXcodeDebug(),
+<<<<<<< HEAD
+=======
+          analytics: fakeAnalytics,
+>>>>>>> 68bfaea224880b488c617afe30ab12091ea8fa4e
         );
       });
 
@@ -1447,6 +1468,16 @@ void main() {
             expect(devices[4].devModeEnabled, true);
 
             expect(fakeProcessManager, hasNoRemainingExpectations);
+<<<<<<< HEAD
+=======
+
+            expect(fakeAnalytics.sentEvents, contains(
+              Event.appleUsageEvent(
+                  workflow: 'device',
+                  parameter: 'ios-trust-failure',
+                )
+            ));
+>>>>>>> 68bfaea224880b488c617afe30ab12091ea8fa4e
           }, overrides: <Type, Generator>{
             Platform: () => macPlatform,
             Artifacts: () => Artifacts.test(),
